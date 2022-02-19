@@ -1,6 +1,8 @@
 package forthehat.hashcode2022.practice;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public record IngredientSelection(List<Ingredient> ingredients, List<Client> clients) {
 
@@ -12,6 +14,10 @@ public record IngredientSelection(List<Ingredient> ingredients, List<Client> cli
   }
 
   public int getNumberOfSatisfiedClients() {
+    return getSatisfiedClients().size();
+  }
+
+  public int getFasterNumberOfSatisfiedClients() {
     return getSatisfiedClients().size();
   }
 }

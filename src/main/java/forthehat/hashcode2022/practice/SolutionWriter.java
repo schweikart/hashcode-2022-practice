@@ -13,7 +13,7 @@ public class SolutionWriter {
     contents.add(String.valueOf(selection.ingredients().size()));
 
     for (var ingredient : selection.ingredients()) {
-      contents.add(ingredient.name());
+      contents.add(ingredient.name);
     }
 
     if (!Files.isDirectory(path.getParent())) {
