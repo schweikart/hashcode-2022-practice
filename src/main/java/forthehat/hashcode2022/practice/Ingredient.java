@@ -21,4 +21,9 @@ public record Ingredient(String name, List<Client> clients) {
             || !getClientsWhoDislike().contains(client))
         .toList();
   }
+
+  @Override
+  public String toString() {
+    return name();
+  }
 }
