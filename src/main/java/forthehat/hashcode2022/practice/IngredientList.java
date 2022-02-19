@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
 
-public class IngredientList extends ArrayList<Ingredient> {
+public class IngredientList extends HashSet<Ingredient> {
   public IngredientList() {
     super();
   }

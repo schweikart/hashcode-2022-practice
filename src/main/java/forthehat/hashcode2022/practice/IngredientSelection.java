@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public record IngredientSelection(List<Ingredient> ingredients, List<Client> clients) {
+public record IngredientSelection(Set<Ingredient> ingredients, List<Client> clients) {
 
   public List<Client> getSatisfiedClients() {
     return clients.stream()

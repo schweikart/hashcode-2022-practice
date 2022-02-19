@@ -34,8 +34,8 @@ public class ProblemParser {
 
   private void parseAndAddClient(String likedIngredientsInput, String dislikedIngredientsInput) {
     var client = new Client(
-        parseIngredientList(likedIngredientsInput),
-        parseIngredientList(dislikedIngredientsInput)
+        new ArrayList<>(parseIngredientList(likedIngredientsInput)),
+        new ArrayList<>(parseIngredientList(dislikedIngredientsInput))
     );
     this.clientList.add(client);
   }
