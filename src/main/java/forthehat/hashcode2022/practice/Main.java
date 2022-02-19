@@ -4,18 +4,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
   public static void main(String[] args) throws IOException {
     System.out.println("FOR THE HAT!");
 
-    Iterator<String> lineIteratorA = getLineIteratorForResource("a_an_example.in.txt");
-    Problem problemA = new ProblemParser(lineIteratorA).parseProblem();
+    solveProblem("a_an_example");
+    solveProblem("b_basic");
+    solveProblem("c_coarse");
+    solveProblem("d_difficult");
+    solveProblem("e_elaborate");
+  }
 
-    Iterator<String> lineIteratorB = getLineIteratorForResource("b_basic.in.txt");
-    Problem problemB = new ProblemParser(lineIteratorB).parseProblem();
+  private static void solveProblem(String problemName) {
+    Iterator<String> lineIterator = getLineIteratorForResource(String.format("%s.in.txt", problemName));
+    Problem problem = new ProblemParser(lineIterator).parseProblem();
+
+    IngredientSelection solution = new IngredientSelection(List.of(), List.of());
+    SolutionWriter.writeSolution(Path.of(String.format("./out/%s.out.txt", problemName)), solution);
   }
 
   private static Iterator<String> getLineIteratorForResource(String resourceName) {
