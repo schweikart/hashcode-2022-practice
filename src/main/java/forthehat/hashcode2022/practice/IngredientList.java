@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.Optional;
 
 public class IngredientList extends ArrayList<Ingredient> {
+  public IngredientList() {
+    super();
+  }
 
   public IngredientList(Collection<Ingredient> ingredients) {
     super(ingredients);
