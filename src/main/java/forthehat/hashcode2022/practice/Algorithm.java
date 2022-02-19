@@ -8,6 +8,8 @@ public class Algorithm {
     private List<String> ingredients = new ArrayList<String>();
     private List<String> currentSolution = new ArrayList<String>();
     private List<String> unusedIngredients = new ArrayList<String>();
+    private static final int LIKED_TO_DISLIKED_RATIO = 5;
+    private static final int NEW_INGREDIENT_PER_CHILD = 5;
 
     Algorithm(List<String> clients){
         this.clients = clients;
@@ -15,7 +17,7 @@ public class Algorithm {
 
     public List<String> initialSolution() {
         for(String ingredient: ingredients){
-            if (ingredient.isDisliked == 0 || ingredient.isLiked() > ingredient.isDisliked() * 5){
+            if (ingredient.isDisliked == 0 || ingredient.isLiked() > ingredient.isDisliked() * LIKED_TO_DISLIKED_RATIO){
                 currentSolution.add(ingredient);
             }
         }
