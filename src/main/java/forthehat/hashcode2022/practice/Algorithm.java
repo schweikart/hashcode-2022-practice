@@ -7,6 +7,7 @@ public class Algorithm {
     private List<String> clients = new ArrayList<String>();
     private List<String> ingredients = new ArrayList<String>();
     private List<String> currentSolution = new ArrayList<String>();
+    private List<String> unusedIngredients = new ArrayList<String>();
 
     Algorithm(List<String> clients){
         this.clients = clients;
@@ -30,7 +31,11 @@ public class Algorithm {
     }
 
     public List<String> getCurrentlyUnusedIngredients(){
-
+        unusedIngredients = ingredients;
+        for(String usedIngredient : currentSolution) {
+            unusedIngredients.remove(usedIngredient);
+        }
+        return unusedIngredients;
     }
 
 }
