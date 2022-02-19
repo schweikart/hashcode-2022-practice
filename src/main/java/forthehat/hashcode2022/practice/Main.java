@@ -14,18 +14,22 @@ public class Main {
   public static void main(String[] args) throws IOException {
     System.out.println("FOR THE HAT!");
 
-    solveProblem("a_an_example");
-    solveProblem("b_basic");
-    solveProblem("c_coarse");
-    solveProblem("d_difficult");
-    solveProblem("e_elaborate");
+   // solveProblem("a_an_example");
+   // solveProblem("b_basic");
+    //solveProblem("c_coarse");
+   solveProblem("d_difficult");
+    //solveProblem("e_elaborate");
   }
 
   private static void solveProblem(String problemName) {
     Iterator<String> lineIterator = getLineIteratorForResource(String.format("%s.in.txt", problemName));
     Problem problem = new ProblemParser(lineIterator).parseProblem();
+    Algorithm algorithm = new Algorithm(problem);
 
-    IngredientSelection solution = new IngredientSelection(List.of(), List.of());
+    IngredientList ingredients = algorithm.initialSolution();
+    ingredients = algorithm.getBetterSolution();
+
+    IngredientSelection solution = new IngredientSelection(ingredients, problem.clients());
     SolutionWriter.writeSolution(Path.of(String.format("./out/%s.out.txt", problemName)), solution);
   }
 

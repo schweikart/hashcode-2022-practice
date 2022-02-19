@@ -4,66 +4,79 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Algorithm {
-    private List<String> clients = new ArrayList<String>();
-    private List<String> ingredients = new ArrayList<String>();
-    private List<String> currentSolution = new ArrayList<String>();
-    private List<String> unusedIngredients = new ArrayList<String>();
-    private static final int LIKED_TO_DISLIKED_RATIO = 5;
+    private List<Client> clients = new ArrayList<Client>();
+    private IngredientList ingredients = new IngredientList();
+    private IngredientList currentSolution = new IngredientList();
+    private IngredientList unusedIngredients = new IngredientList();
+    private static final int LIKED_TO_DISLIKED_RATIO = 1;
     private static final int NEW_INGREDIENT_PER_CHILD = 5;
 
-    Algorithm(List<String> clients) {
-        this.clients = clients;
+    Algorithm(Problem problem) {
+        this.clients = problem.clients();
+        this.ingredients = problem.ingredients();
     }
 
-    public List<String> initialSolution() {
-        for (String ingredient : ingredients) {
-            if (ingredient.isDisliked == 0 || ingredient.isLiked() > ingredient.isDisliked() * LIKED_TO_DISLIKED_RATIO) {
+    public IngredientList initialSolution2() {
+        for (Ingredient ingredient : ingredients) {
+            if (Math.random() < 0.5) {
                 currentSolution.add(ingredient);
             }
         }
+        System.out.println((new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
         return currentSolution;
     }
 
-    public List<String> getBetterSolution() {
-        for (int i =0; i <1000; i++){
+    public IngredientList initialSolution() {
+        for (Ingredient ingredient : ingredients) {
+            if (ingredient.getClientsWhoDislikeCount() == 0 /*|| ingredient.getClientsWhoAcceptCount() > ingredient.getClientsWhoDislikeCount() * LIKED_TO_DISLIKED_RATIO*/) {
+                currentSolution.add(ingredient);
+            }
+        }
+        System.out.println((new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
+        return currentSolution;
+    }
+
+    public IngredientList getBetterSolution() {
+        for (int i = 0; i < 1000; i++) {
             getFavoritChild();
         }
         return this.currentSolution;
     }
 
-    public List<String> getFavoritChild() {
-        List<List<String>> childs = null;
+    public IngredientList getFavoritChild() {
+        List<IngredientList> childs = new ArrayList<IngredientList>();
         for (int i = 0; i < 100; i++) {
             childs.add(this.getChild());
         }
         int bestSolution = 0;
-        List<String> favoritChild = null;
-        for(List<String> child : childs){
-            int childSolution = Scoring.scoring(child, clients);
-            if(childSolution > bestSolution){
+        IngredientList favoriteChild = new IngredientList();
+        for (IngredientList child : childs) {
+            int childSolution =  (new IngredientSelection(child, this.clients)).getNumberOfSatisfiedClients();
+            if (childSolution > bestSolution) {
                 bestSolution = childSolution;
-                favoritChild = child;
+                favoriteChild = child;
             }
         }
         System.out.println(bestSolution);
-        return favoritChild;
+        return favoriteChild;
     }
 
-    public List<String> getChild() {
-        List<String> unUsedIngredients = this.getCurrentlyUnusedIngredients();
+    public IngredientList getChild() {
+        IngredientList unUsedIngredients = this.getCurrentlyUnusedIngredients();
         for (int i = 0; i < Math.min(Math.random() * NEW_INGREDIENT_PER_CHILD, unUsedIngredients.size()); i++) {
-            String ingredient = unUsedIngredients.get((int) Math.random() * unUsedIngredients.size());
-            currentSolution.add(unUsedIngredients.get((int) Math.random() * unUsedIngredients.size()));
+            Ingredient ingredient = unUsedIngredients.get((int) (Math.random() * unUsedIngredients.size()));
+            currentSolution.add(ingredient);
             unUsedIngredients.remove(ingredient);
         }
         for (int i = 0; i < Math.min(Math.random() * NEW_INGREDIENT_PER_CHILD, currentSolution.size()); i++) {
-            currentSolution.remove(currentSolution.get((int) Math.random() * currentSolution.size()));
+            currentSolution.remove(currentSolution.get((int) (Math.random() * currentSolution.size())));
         }
+        return this.currentSolution;
     }
 
-    public List<String> getCurrentlyUnusedIngredients() {
+    public IngredientList getCurrentlyUnusedIngredients() {
         unusedIngredients = ingredients;
-        for (String usedIngredient : currentSolution) {
+        for (Ingredient usedIngredient : currentSolution) {
             unusedIngredients.remove(usedIngredient);
         }
         return unusedIngredients;

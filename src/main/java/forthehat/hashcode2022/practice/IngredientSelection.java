@@ -6,7 +6,7 @@ public record IngredientSelection(List<Ingredient> ingredients, List<Client> cli
 
   public List<Client> getSatisfiedClients() {
     return clients.stream()
-        .filter(client -> client.likedIngredients().containsAll(ingredients)
+        .filter(client -> ingredients.containsAll(client.likedIngredients())
             && client.dislikedIngredients().stream().noneMatch(ingredients::contains))
         .toList();
   }
