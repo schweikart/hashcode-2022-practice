@@ -37,7 +37,7 @@ public class Algorithm {
     }
 
     public IngredientList getBetterSolution() {
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             //getFavoritChild();
             getFavoritChildChinaVersion();
             System.out.println((new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
@@ -87,13 +87,13 @@ public class Algorithm {
         for (IngredientList child : childs) {
 
             int childSolution = (new IngredientSelection(child, this.clients)).getNumberOfSatisfiedClients();
-            if (childSolution > currentSolutionCount && childSolution > bestSolution) {
+            if (childSolution >= currentSolutionCount && childSolution > bestSolution) {
                 bestSolution = childSolution;
                 favoriteChild = child;
                 this.currentSolution = favoriteChild;
             }
         }
-        if (bestSolution > (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients()) {
+        if (bestSolution >= (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients()) {
             allTimeFavoritChild = favoriteChild;
         }
         //System.out.println(bestSolution);
