@@ -6,11 +6,12 @@ import java.util.List;
 public class Algorithm {
     private List<Client> clients = new ArrayList<Client>();
     private IngredientList ingredients = new IngredientList();
+    private IngredientList usableIngredients = new IngredientList();
     private IngredientList currentSolution = new IngredientList();
     private IngredientList unusedIngredients = new IngredientList();
     private IngredientList allTimeFavoritChild = new IngredientList();
     private static final int LIKED_TO_DISLIKED_RATIO = 1;
-    private static final int NEW_INGREDIENT_PER_CHILD = 2;
+    private int NEW_INGREDIENT_PER_CHILD = 2;
 
     Algorithm(Problem problem) {
         this.clients = problem.clients();
@@ -23,6 +24,12 @@ public class Algorithm {
                 ingredient.dislikeAmount++;
             }
         }
+        for (Ingredient ingredient : ingredients) {
+            if (!(ingredient.getClientsWhoDislikeCount() == 0)) {
+                usableIngredients.add(ingredient);
+            }
+        }
+        System.out.println(usableIngredients.size());
     }
 
     public IngredientList initialSolution() {
@@ -37,11 +44,37 @@ public class Algorithm {
     }
 
     public IngredientList getBetterSolution() {
-        for (int i = 0; i < 1000000; i++) {
-            //getFavoritChild();
-            getFavoritChildChinaVersion();
-            System.out.println((new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
-            System.out.println(i);
+        for (int j = 50; j > 0; j--) {
+            this.NEW_INGREDIENT_PER_CHILD = j;
+            if (j > 20) {
+                for (int i = 0; i < 100; i++) {
+                    //getFavoritChild();
+                    getFavoritChildChinaVersion();
+                    System.out.println("Current Score: " + (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
+                    System.out.println(i + " " + j);
+                }
+            } else if (j > 10) {
+                for (int i = 0; i < 4000; i++) {
+                    //getFavoritChild();
+                    getFavoritChildChinaVersion();
+                    System.out.println("Current Score: " + (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
+                    System.out.println(i + " " + j);
+                }
+            } else if (j > 3) {
+                for (int i = 0; i < 40000; i++) {
+                    //getFavoritChild();
+                    getFavoritChildChinaVersion();
+                    System.out.println("Current Score: " + (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
+                    System.out.println(i + " " + j);
+                }
+            } else {
+                for (int i = 0; i < 300000; i++) {
+                    //getFavoritChild();
+                    getFavoritChildChinaVersion();
+                    System.out.println("Current Score: " + (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
+                    System.out.println(i + " " + j);
+                }
+            }
         }
         //System.out.println("hat size: " +(new IngredientSelection(allTimeFavoritChild, this.clients)).getNumberOfSatisfiedClients());
         System.out.println("hat size: " + (new IngredientSelection(currentSolution, this.clients)).getNumberOfSatisfiedClients());
@@ -110,14 +143,19 @@ public class Algorithm {
 
         if (Math.random() < 0.5) {
             for (int i = 0; i < NEW_INGREDIENT_PER_CHILD; i++) {
-                Ingredient randomIngredient = Helper.getRandomElement(ingredients);
-                modifiedSolution.add(randomIngredient);
-                didSomething = true;
+                if (usableIngredients.size() != 0) {
+                    Ingredient randomIngredient = Helper.getRandomElement(usableIngredients);
+                    modifiedSolution.add(randomIngredient);
+                    didSomething = true;
+                }
             }
         }
         if (Math.random() < 0.5 || !didSomething) {
             for (int i = 0; i < Math.min(NEW_INGREDIENT_PER_CHILD, modifiedSolution.size()); i++) {
-                modifiedSolution.remove(Helper.getRandomElement(modifiedSolution));
+                Ingredient randomIngredient = Helper.getRandomElement(modifiedSolution);
+                if (usableIngredients.contains(randomIngredient)) {
+                    modifiedSolution.remove(randomIngredient);
+                }
             }
         }
         return modifiedSolution;
